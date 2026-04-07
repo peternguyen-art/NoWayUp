@@ -10,6 +10,11 @@ public class PlayerMovement : MonoBehaviour
     public float dashSpeed = 15f;
     public float dashTime = 0.2f;
     public float dashCooldown = 0.5f;
+    public float jumpForce = 10f;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    bool isGrounded;
     bool isDashing;
     float dashTimer;
     float dashCooldownTimer;
@@ -17,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     Vector2 lastMoveDirection;
 
-    
+
     void Awake()
     {
         controls = new PlayerControls();
@@ -25,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
         controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
         controls.Player.Dash.performed += ctx => StartDash();
+        controls.Player.Jump.performed += ctx => Jump();
     }
 
     void OnEnable()
@@ -40,9 +46,12 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         dashCooldownTimer -= Time.fixedDeltaTime;
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
         if (isDashing)
         {
-            body.linearVelocity = moveInput.normalized * dashSpeed;
+            body.linearVelocity = new Vector2(lastMoveDirection.x * dashSpeed, body.linearVelocity.y);
             dashTimer -= Time.fixedDeltaTime;
 
             if (dashTimer <= 0)
@@ -51,19 +60,16 @@ public class PlayerMovement : MonoBehaviour
             }
             return;
         }
-        body.linearVelocity = moveInput * speed;
-        animator.SetFloat("Speed", moveInput.magnitude);
 
-        if (lastMoveDirection != Vector2.zero)
+        body.linearVelocity = new Vector2(moveInput.x * speed, body.linearVelocity.y);
+
+        animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+
+        if (moveInput.x != 0)
         {
-          lastMoveDirection = moveInput;
-        };
-
-        if (moveInput.x > 0)
-        spriteRenderer.flipX = false;
-
-        if (moveInput.x < 0)
-        spriteRenderer.flipX = true;
+            lastMoveDirection = moveInput;
+            spriteRenderer.flipX = moveInput.x < 0;
+        }
     }
 
     void StartDash()
@@ -76,5 +82,13 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Dash");
         }
     }
+
+    void Jump()
+    {
+        if (isGrounded && !isDashing)
+        {
+            body.linearVelocity = new Vector2(body.linearVelocity.x, jumpForce);
+            animator.SetTrigger("Jump");
+        }
+    }
 }
-    
