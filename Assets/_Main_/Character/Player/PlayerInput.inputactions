@@ -34,9 +34,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "Run",
                     "type": "Button",
-                    "id": "d5137bed-13aa-4563-8780-5af46cb64fd7",
+                    "id": "1b6157a6-2b47-4b40-8025-f60056b174f9",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -266,12 +266,12 @@
                 },
                 {
                     "name": "",
-                    "id": "527dbcfb-5970-4e30-bdd0-2a5b8a3cda5e",
-                    "path": "<Keyboard>/space",
+                    "id": "c46bb555-10aa-479c-a188-9a8f85195252",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

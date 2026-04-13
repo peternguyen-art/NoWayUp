@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,22 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     public float walkSpeed = 5f;
     Vector2 moveInput;
-    public bool IsMoving {get; private set;}
+
+    [SerializeField]
+    private Boolean _isMoving = false;
+    public bool IsMoving { get { return _isMoving; } 
+        private set { _isMoving = value; 
+            animator.SetBool("IsMoving", _isMoving); } }
+
+    [SerializeField]
+    private bool isRunning = false;
+    public bool IsRunning { get { return isRunning; } 
+        private set { isRunning = value; 
+            animator.SetBool("IsRunning", isRunning); }
+    }
+
+
+    Animator animator;
 
     void Awake()
     {
@@ -27,13 +43,24 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(moveInput.x * walkSpeed * Time.fixedDeltaTime, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveInput.x * walkSpeed, rb.linearVelocity.y);
     }
 
-    void onMove(InputAction.CallbackContext context){
+    public void OnMove(InputAction.CallbackContext context){
         moveInput = context.ReadValue<Vector2>();
 
         IsMoving = moveInput != Vector2.zero;
 
+    }
+
+    public void OnRun(InputAction.CallbackContext context){
+        if (context.started)
+        {
+            IsRunning = true;
+        }
+        else if (context.canceled)
+        {
+            IsRunning = false;
+        }
     }
 }
