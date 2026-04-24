@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7581677431960572879}
   - component: {fileID: 6925013090462034759}
   - component: {fileID: 5986486009346953582}
+  - component: {fileID: 5520738946758287201}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -136,6 +137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   walkSpeed: 5
   runSpeed: 8
+  airSpeed: 4
+  jumpForce: 10
   _isMoving: 0
   _isRunning: 0
 --- !u!114 &6925013090462034759
@@ -243,6 +246,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1b6157a6-2b47-4b40-8025-f60056b174f9
     m_ActionName: 'Player/Run[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f28e9215-68f6-4de0-9836-51290f4ae64f
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -270,3 +277,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5520738946758287201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718777836383833839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cab5ff693881164a9f26a59a8d4a177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TouchingDirection
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 64
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  groundDistance: 0.05
+  wallCheckDistance: 0.2
+  ceilingDistance: 0.05
+  _isGrounded: 1
+  _isOnWall: 1
+  _isOnCeiling: 1

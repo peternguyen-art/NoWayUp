@@ -13,5 +13,16 @@ internal class AnimationStrings
     public static string IsOnWall = "IsOnWall";
     public static string IsOnCeiling = "IsOnCeiling";
     public static string Attack = "Attack";
-    public static string canMove = "canMove";
+    public static string CanMove = "CanMove";
+    public static string HasTarget = "HasTarget";
+
+    public static string IsAlive = "IsAlive";
+
+    public static string IsHit = "IsHit";
+
+    public static string HitTrig = "Hit";
+
+    public static string LockVec = "LockVec";
+
+    public static string AttackCooldown = "AttackCooldown";
 }

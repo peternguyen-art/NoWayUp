@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirection), typeof(Animator))]
-
+[RequireComponent(typeof(Damagable))]
 public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rb;
@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float airSpeed = 4f;
     Vector2 moveInput;
     TouchingDirection touchingDirection;
+    Damagable damagable;
 
     public float jumpForce = 10f;
 
@@ -80,7 +81,12 @@ public class PlayerController : MonoBehaviour
 
     public bool CanMove
     {
-        get { return animator.GetBool(AnimationStrings.canMove); }
+        get { return animator.GetBool(AnimationStrings.CanMove); }
+    }
+
+    public bool IsAlive
+    {
+        get { return animator.GetBool(AnimationStrings.IsAlive); }
     }
 
     void Awake()
@@ -88,11 +94,15 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         touchingDirection = GetComponent<TouchingDirection>();
+        damagable = GetComponent<Damagable>();
     }
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+        if (!damagable.LockVec)
+        {
+            rb.linearVelocity = new Vector2(moveInput.x * CurrentSpeed, rb.linearVelocity.y);
+        }
 
         animator.SetFloat(AnimationStrings.yVelocity, rb.linearVelocity.y);
     }
@@ -100,9 +110,14 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context){
         moveInput = context.ReadValue<Vector2>();
 
-        IsMoving = moveInput != Vector2.zero;
+        if (IsAlive)
+        {
 
-        SetFacingDir(moveInput);
+            IsMoving = moveInput != Vector2.zero;
+
+            SetFacingDir(moveInput);
+        }
+
 
     }
 
@@ -145,5 +160,10 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger(AnimationStrings.Attack);
         }
+    }
+
+    public void OnHit(int damage)
+    {
+        damagable.Hit(damage);
     }
 }
